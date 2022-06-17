@@ -2560,7 +2560,6 @@ export class GridRenderer {
       if (!autoSelectRow) {
         // Scrollbar Selection Tick
         const { selectedRanges, model, cursorColumn } = state;
-        const { lastLeft } = metrics;
         const { columnCount } = model;
 
         const filteredRanges = [...selectedRanges].filter(
@@ -2600,10 +2599,14 @@ export class GridRenderer {
             (range.startColumn !== cursorColumn ||
               range.endColumn !== cursorColumn)
           ) {
-            const tickX = Math.round((range.startColumn / lastLeft) * barWidth);
+            const tickX = Math.round(
+              (range.startColumn / columnCount) * barWidth
+            );
             const tickWidth = Math.max(
               1,
-              Math.round(((range.endColumn + 1) / lastLeft) * barWidth - tickX)
+              Math.round(
+                ((range.endColumn + 1) / columnCount) * barWidth - tickX
+              )
             );
             const trackHeight = hScrollBarSize - scrollBarCasingWidth;
             context.fillRect(
@@ -2617,7 +2620,7 @@ export class GridRenderer {
 
         // Current Active Tick
         if (cursorColumn != null) {
-          const tickX = Math.round((cursorColumn / lastLeft) * barWidth);
+          const tickX = Math.round((cursorColumn / columnCount) * barWidth);
           const tickWidth = 2;
           const trackHeight = hScrollBarSize - scrollBarCasingWidth;
           context.fillStyle = scrollBarActiveSelectionTickColor;
